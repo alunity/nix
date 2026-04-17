@@ -3,7 +3,6 @@
   home.homeDirectory = "/home/alunity";
   home.stateVersion = "24.11"; # Match your system stateVersion
 
-  nixpkgs.config.allowUnfree = true;
   programs.home-manager.enable = true;
 
   # Install user-specific apps
@@ -16,6 +15,7 @@
     tmux
     nerd-fonts.caskaydia-cove
     fish
+    home-manager
   ];
 
 
@@ -89,24 +89,37 @@
       hconf = "nvim ~/.config/home-manager/home.nix";
     };
 
-    # Optional: Turn off the fish greeting
     interactiveShellInit = ''
-      set -g fish_greeting ""
-    '';
-    };
+        set -g fish_greeting ""
+        # Enable Vim mode
+        fish_vi_key_bindings
+
+        # Optional: Set the cursor shapes for different modes
+        set fish_cursor_default block
+        set fish_cursor_insert line
+        set fish_cursor_replace_one underscore
+        set fish_cursor_visual block
+      '';
+  };
 
 
   programs.git = {
     enable = true;
-    userName = "alunity";
-    userEmail = "you@example.com";
-    extraConfig = {
+    settings = {
+      user = {
+        name = "alunity";
+        email = "75143943+alunity@users.noreply.github.com";
+      };
       init.defaultBranch = "main";
     };
+
+    signing.format = null;
   };
 
   programs.tmux = {
     enable = true;
+
+    shell = "${pkgs.fish}/bin/fish";
     
     # --- Basic Settings ---
     shortcut = "a";          # Replaces unbind C-b and set-option -g prefix C-a

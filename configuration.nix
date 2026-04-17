@@ -73,15 +73,31 @@
   fileSystems."/persist".neededForBoot = true;
 
   # bootloader settings
-  boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.enable = lib.mkForce false;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.systemd-boot.configurationLimit = 10;
+  boot.loader.systemd-boot.configurationLimit = 0;
+
+
+  boot.lanzaboote = {
+    enable = true;
+    pkiBundle = "/etc/secureboot"; # This folder MUST be persisted!
+  };
+
+  boot.initrd.luks.devices."cryptroot" = {
+    device = "/dev/nvme0n1p3"; # Adjust to your partition
+    preLVM = true;
+    allowDiscards = true;
+    # This is the magic line:
+    crypttabExtraOpts = [ "tpm2-device=auto" ]; 
+  };
  
   zramSwap.enable = true;
 
   environment.persistence."/persist" = {
     hideMounts = true;
     directories = [
+      "/etc/secureboot"
+      "/var/lib/sbctl"    # The metadata database (Fixes the migrate error)
       "/var/log"
       "/var/lib/bluetooth"
       "/var/lib/nixos"
@@ -98,6 +114,7 @@
   };
 
   environment.systemPackages = with pkgs; [
+    sbctl
     gnome-tweaks
     adw-gtk3
   ];
@@ -108,4 +125,5 @@
   # services.geoclue2.enable = true;
 
   system.stateVersion = "24.11"; # Ensure this matches your nixpkgs!
+
 }

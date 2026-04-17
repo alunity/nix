@@ -18,19 +18,22 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote"; 
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, disko, impermanence, sops-nix, ... }@inputs: {
+  outputs = { self, nixpkgs, disko, impermanence, sops-nix, lanzaboote, ... }@inputs: {
     nixosConfigurations.nixy = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = { inherit inputs; };
       modules = [
         disko.nixosModules.disko
         impermanence.nixosModules.impermanence
-        sops-nix.nixosModules.sops # Add this
-        ./configuration.nix          # Your main logic
-        ./disko-config.nix           # The drive layout we discussed
-        ./hardware-configuration.nix # Generated on the machine
+        sops-nix.nixosModules.sops 
+        lanzaboote.nixosModules.lanzaboote
         inputs.home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
@@ -38,6 +41,9 @@
           home-manager.users.alunity = import ./home.nix;
           home-manager.extraSpecialArgs = { inherit inputs; };
         }
+        ./configuration.nix          # Your main logic
+        ./disko-config.nix           # The drive layout we discussed
+        ./hardware-configuration.nix # Generated on the machine
       ];
     };
   };
