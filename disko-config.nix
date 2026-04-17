@@ -21,8 +21,6 @@
               content = {
                 type = "luks";
                 name = "crypted";
-                # Comment out keyFile to use a manual password during install
-                settings.keyFile = "/tmp/secret.key"; 
                 content = {
                   type = "btrfs";
                   extraArgs = [ "-f" ];

@@ -25,6 +25,9 @@
       vpl-gpu-rt # OneVPL for hardware video processing
     ];
   };
+
+  networking.networkManager.enable = true;
+  networking.hostName = "nixy";
   
   services.thermald.enable = true;
 
