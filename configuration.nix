@@ -26,7 +26,10 @@
     ];
   };
 
-  networking.networkManager.enable = true;
+  nix.settings.experimental-features = [ "nix-command" "flakes"];
+  nixpkgs.config.allowUnfree = true;
+
+  networking.networkmanager.enable = true;
   networking.hostName = "nixy";
   
   services.thermald.enable = true;
@@ -46,11 +49,23 @@
     hashedPasswordFile = config.sops.secrets.user-password.path;
   };
 
+	users.users.root.hashedPasswordFile=config.sops.secrets.user-password.path;
+
   # 3. System Services (GNOME)
   services.xserver.enable = true;
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
   services.libinput.enable = true; # For touchpads
+
+	services.xserver.xkb = {
+		layout = "gb";
+		variant = "";
+	};
+	console.keyMap = "uk";
+
+	security.sudo.extraConfig = ''
+		Defaults lecture=never
+	'';
 
 
   # critical for tmpfs: allow nixos to boot with a blank root
@@ -71,7 +86,7 @@
       "/var/lib/bluetooth"
       "/var/lib/nixos"
       "/var/lib/systemd/coredump"
-      "/etc/networkmanager/system-connections"
+      "/etc/NetworkManager/system-connections"
       "/var/lib/sops-nix"
       "/var/lib/gdm"
       "/var/lib/accounts-service"
@@ -81,5 +96,16 @@
       "/etc/machine-id"
     ];
   };
+
+  environment.systemPackages = with pkgs; [
+    gnome-tweaks
+    adw-gtk3
+  ];
+
+
+  time.timeZone = "Europe/London"; # Replace with your actual zone
+  # services.automatic-timezoned.enable = true;
+  # services.geoclue2.enable = true;
+
   system.stateVersion = "24.11"; # Ensure this matches your nixpkgs!
 }

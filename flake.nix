@@ -13,6 +13,11 @@
     impermanence.url = "github:nix-community/impermanence";
 
     sops-nix.url = "github:Mic92/sops-nix";
+
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { self, nixpkgs, disko, impermanence, sops-nix, ... }@inputs: {
@@ -26,6 +31,13 @@
         ./configuration.nix          # Your main logic
         ./disko-config.nix           # The drive layout we discussed
         ./hardware-configuration.nix # Generated on the machine
+        inputs.home-manager.nixosModules.home-manager
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.users.alunity = import ./home.nix;
+          home-manager.extraSpecialArgs = { inherit inputs; };
+        }
       ];
     };
   };
