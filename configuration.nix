@@ -75,7 +75,8 @@
   # bootloader settings
   boot.loader.systemd-boot.enable = lib.mkForce false;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.systemd-boot.configurationLimit = 0;
+  boot.loader.systemd-boot.configurationLimit = 10;
+  boot.loader.timeout = 0;
 
 
   boot.lanzaboote = {
@@ -84,7 +85,7 @@
   };
 
   boot.initrd.luks.devices."cryptroot" = {
-    device = "/dev/nvme0n1p3"; # Adjust to your partition
+    device = "/dev/nvme0n1p2";
     preLVM = true;
     allowDiscards = true;
     # This is the magic line:
