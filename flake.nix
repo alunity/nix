@@ -15,7 +15,7 @@
     sops-nix.url = "github:Mic92/sops-nix";
   };
 
-  outputs = { self, nixpkgs, disko, impermanence, ... }@inputs: {
+  outputs = { self, nixpkgs, disko, impermanence, sops-nix, ... }@inputs: {
     nixosConfigurations.nixy = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = { inherit inputs; };
