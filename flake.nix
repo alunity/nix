@@ -11,16 +11,18 @@
 
     # 3. Impermanence for 'Erase Your Darlings'
     impermanence.url = "github:nix-community/impermanence";
+
+    sops-nix.url = "github:Mic92/sops-nix";
   };
 
   outputs = { self, nixpkgs, disko, impermanence, ... }@inputs: {
-    # Replace 'my-laptop' with your actual desired hostname
-    nixosConfigurations.my-laptop = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.nixy = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = { inherit inputs; };
       modules = [
         disko.nixosModules.disko
         impermanence.nixosModules.impermanence
+        sops-nix.nixosModules.sops # Add this
         ./configuration.nix          # Your main logic
         ./disko-config.nix           # The drive layout we discussed
         ./hardware-configuration.nix # Generated on the machine

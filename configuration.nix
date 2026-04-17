@@ -38,7 +38,7 @@
   # 2. use the secret for your user
   users.users.alunity = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager", "video" ];
+    extraGroups = [ "wheel" "networkmanager" "video" ];
     # instead of hashedpassword, use hashedpasswordfile
     hashedPasswordFile = config.sops.secrets.user-password.path;
   };
