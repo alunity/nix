@@ -7,10 +7,10 @@
     
     # this is critical for ephemeral systems:
     # tell sops to look for the key on the persistent partition
-    age.keyfile = "/persist/var/lib/sops-nix/key.txt";
+    age.keyFile = "/persist/var/lib/sops-nix/key.txt";
 
     secrets.user-password = {
-      neededforusers = true; # required so it's available at login
+      neededForUsers = true; # required so it's available at login
     };
   };
 
@@ -45,23 +45,24 @@
 
   # 3. System Services (GNOME)
   services.xserver.enable = true;
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+  services.displayManager.gdm.enable = true;
+  services.desktopManager.gnome.enable = true;
   services.libinput.enable = true; # For touchpads
 
 
   # critical for tmpfs: allow nixos to boot with a blank root
   fileSystems."/".neededForBoot = true;
+  fileSystems."/persist".neededForBoot = true;
 
   # bootloader settings
   boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.cantouchefivariables = true;
-  boot.loader.systemd-boot.configurationlimit = 10;
+  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.systemd-boot.configurationLimit = 10;
  
-  zramswap.enable = true;
+  zramSwap.enable = true;
 
   environment.persistence."/persist" = {
-    hidemounts = true;
+    hideMounts = true;
     directories = [
       "/var/log"
       "/var/lib/bluetooth"
