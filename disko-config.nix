@@ -27,10 +27,6 @@
                   type = "btrfs";
                   extraArgs = [ "-f" ];
                   subvolumes = {
-                    # We don't mount / here. We leave it for the tmpfs in the OS config.
-                    "/root" = {
-                      mountpoint = "/partition-root"; # Mount it somewhere else just to have it
-                    };
                     "/persist" = {
                       mountpoint = "/persist";
                       mountOptions = [ "compress=zstd" "noatime" ];
@@ -50,6 +46,13 @@
           };
         };
       };
+    };
+    nodev."/" = {
+      fsType = "tmpfs";
+      mountOptions = [
+        "size=4G"   
+        "mode=755"
+      ];
     };
   };
 }
