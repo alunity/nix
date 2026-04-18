@@ -32,6 +32,8 @@
     uv
     ripgrep
     unzip
+    wget
+    curl
   ];
 
   home.sessionVariables = {
