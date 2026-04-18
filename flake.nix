@@ -43,7 +43,12 @@
         inputs.home-manager.nixosModules.home-manager {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
-          home-manager.users.alunity = import ./home.nix;
+          home-manager.users.alunity = {
+            imports = [ 
+              ./home.nix 
+              inputs.sops-nix.homeManagerModules.sops # Add the HM module here
+            ];
+          };
           home-manager.extraSpecialArgs = { inherit inputs; };
         }
 
@@ -59,6 +64,7 @@
       extraSpecialArgs = { inherit inputs; };
       modules = [ 
         ./home.nix 
+        inputs.sops-nix.homeManagerModules.sops
       ];
     };
   };

@@ -1,9 +1,19 @@
-{ pkgs, ... }: {
+{ config, pkgs,  ... }: {
   home.username = "alunity";
   home.homeDirectory = "/home/alunity";
   home.stateVersion = "24.11"; # Match your system stateVersion
 
   programs.home-manager.enable = true;
+
+  sops = {
+    defaultSopsFile = ./secrets.yaml;
+    validateSopsFiles = false;
+    
+    # tell sops to look for the key on the persistent partition
+    age.keyFile = "/persist/var/lib/sops-nix/key.txt";
+
+    secrets.moodle-token = { };
+  };
 
   # Install user-specific apps
   home.packages = with pkgs; [
@@ -19,11 +29,13 @@
     nix-your-shell
     btop
     fzf
+    uv
   ];
 
   home.sessionVariables = {
     EDITOR = "nvim";
-    MOODLE_TOKEN = "REMOVED_SECRET";
+    SOPS_AGE_KEY_FILE = "/persist/var/lib/sops-nix/key.txt";
+    MOODLE_TOKEN = "$(cat ${config.sops.secrets.moodle-token.path})";
   };
 
   programs.chromium = {

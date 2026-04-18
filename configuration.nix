@@ -113,11 +113,14 @@
     ];
   };
 
+  
   environment.systemPackages = with pkgs; [
     sbctl
+    sops
     gnome-tweaks
     adw-gtk3
   ];
+  programs.nix-ld.enable = true;
 
 
   time.timeZone = "Europe/London"; # Replace with your actual zone
