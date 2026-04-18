@@ -57,6 +57,23 @@
   services.desktopManager.gnome.enable = true;
   services.libinput.enable = true; # For touchpads
 
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+
+    # This replaces the manual ~/.config/pipewire edits:
+    extraConfig.pipewire."92-low-latency" = {
+      "context.properties" = {
+        "default.clock.rate" = 48000;
+        "default.clock.allowed-rates" = [ 48000 ];
+        "default.clock.min-quantum" = 1024;
+        "default.clock.max-quantum" = 2048; # Good to set a ceiling too
+      };
+    };
+  };
+
 	services.xserver.xkb = {
 		layout = "gb";
 		variant = "";

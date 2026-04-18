@@ -42,6 +42,15 @@
     MOODLE_TOKEN = "$(cat ${config.sops.secrets.moodle-token.path})";
   };
 
+  programs.gnome-shell = {
+    enable = true;
+    extensions = [
+      { package = pkgs.gnomeExtensions.blur-my-shell; }
+      { package = pkgs.gnomeExtensions.system-monitor; }
+      { package = pkgs.gnomeExtensions.keep-awake; }
+    ];
+  };
+
   programs.chromium = {
     enable = true;
     # This tells the chromium module to use the official Google Chrome binary
@@ -211,6 +220,10 @@
     extraConfig = ''
       set completion-ignore-case on
     '';
+  };
+
+  services.easyeffects = {
+    enable = true;
   };
 
 
