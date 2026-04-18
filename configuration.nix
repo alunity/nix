@@ -51,28 +51,10 @@
 
 	users.users.root.hashedPasswordFile=config.sops.secrets.user-password.path;
 
-  # 3. System Services (GNOME)
   services.xserver.enable = true;
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
   services.libinput.enable = true; # For touchpads
-
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-
-    # This replaces the manual ~/.config/pipewire edits:
-    extraConfig.pipewire."92-low-latency" = {
-      "context.properties" = {
-        "default.clock.rate" = 48000;
-        "default.clock.allowed-rates" = [ 48000 ];
-        "default.clock.min-quantum" = 1024;
-        "default.clock.max-quantum" = 2048; # Good to set a ceiling too
-      };
-    };
-  };
 
 	services.xserver.xkb = {
 		layout = "gb";
@@ -80,10 +62,40 @@
 	};
 	console.keyMap = "uk";
 
+  services.pipewire = {
+    enable = true;
+    # This section forces the driver to ignore the cable's "broken" clock
+    extraConfig.pipewire."10-usb-sync-fix" = {
+      "context.properties" = {
+        "default.clock.rate" = 44100; # Most UAC1 chips natively prefer 44.1
+        "default.clock.allowed-rates" = [ 44100 ]; # Force lock it
+      };
+    };
+
+    wireplumber.extraConfig."10-ktmicro-fix" = {
+      "monitor.alsa.rules" = [
+        {
+          matches = [ { "node.name" = "~alsa_input.usb-KTMicro.*"; } ];
+          actions = {
+            update-props = {
+              # Bypasses the 'Batch' processing which often causes the crackle
+              "api.alsa.disable-batch" = true;
+              "api.alsa.period-size" = 512;
+              "api.alsa.headroom" = 1024;
+              # Fixes the 'distuning' by forcing the driver to handle timing
+              "api.condition" = "if-exists";
+              "audio.format" = "S16LE"; 
+              "audio.rate" = 44100;
+            };
+          };
+        }
+      ];
+    };
+  };
+
 	security.sudo.extraConfig = ''
 		Defaults lecture=never
 	'';
-
 
   # critical for tmpfs: allow nixos to boot with a blank root
   fileSystems."/".neededForBoot = true;

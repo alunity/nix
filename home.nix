@@ -30,6 +30,7 @@
     btop
     fzf
     uv
+    cargo
     ripgrep
     unzip
     wget
