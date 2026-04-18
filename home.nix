@@ -16,7 +16,15 @@
     fish
     fastfetch
     htop
+    nix-your-shell
+    btop
+    fzf
   ];
+
+  home.sessionVariables = {
+    EDITOR = "nvim";
+    MOODLE_TOKEN = "REMOVED_SECRET";
+  };
 
   programs.chromium = {
     enable = true;
@@ -30,11 +38,6 @@
     ];
   };
 
-  home.sessionVariables = {
-    EDITOR = "nvim";
-    MOODLE_TOKEN = "REMOVED_SECRET";
-  };
-
   programs.bash = {
     enable = true;
     shellAliases = {
@@ -43,6 +46,14 @@
       update = "home-manager switch";
       v = "nvim";
     };
+  };
+
+  programs.zoxide = {
+    enable = true;
+    enableFishIntegration = true; # This is true by default, but good to be explicit
+    options = [
+      "--cmd j" # Optional: use 'j' instead of 'z'
+    ];
   };
 
   programs.ghostty = {
@@ -110,6 +121,8 @@
         set fish_cursor_insert line
         set fish_cursor_replace_one underscore
         set fish_cursor_visual block
+
+        nix-your-shell fish | source
       '';
   };
 
