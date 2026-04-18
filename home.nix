@@ -35,6 +35,7 @@
     unzip
     wget
     curl
+    prismlauncher
   ];
 
   home.sessionVariables = {
