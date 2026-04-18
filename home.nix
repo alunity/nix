@@ -15,6 +15,7 @@
     tmux
     nerd-fonts.caskaydia-cove
     fish
+    fastfetch
   ];
 
 
@@ -73,7 +74,7 @@
       # System Management
       ".." = "cd ..";
       nrs = "sudo nixos-rebuild switch --flake .#nixy";
-      hms = "home-manager switch --flake .#alunity";
+      hms = "nix run home-manager -- switch --flake .#nixy";
       
       # Cleanup & Maintenance
       ngc = "nix-collect-garbage -d"; # Delete old generations to free space
