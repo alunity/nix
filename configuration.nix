@@ -62,37 +62,6 @@
 	};
 	console.keyMap = "uk";
 
-  services.pipewire = {
-    enable = true;
-    # This section forces the driver to ignore the cable's "broken" clock
-    extraConfig.pipewire."10-usb-sync-fix" = {
-      "context.properties" = {
-        "default.clock.rate" = 44100; # Most UAC1 chips natively prefer 44.1
-        "default.clock.allowed-rates" = [ 44100 ]; # Force lock it
-      };
-    };
-
-    wireplumber.extraConfig."10-ktmicro-fix" = {
-      "monitor.alsa.rules" = [
-        {
-          matches = [ { "node.name" = "~alsa_input.usb-KTMicro.*"; } ];
-          actions = {
-            update-props = {
-              # Bypasses the 'Batch' processing which often causes the crackle
-              "api.alsa.disable-batch" = true;
-              "api.alsa.period-size" = 512;
-              "api.alsa.headroom" = 1024;
-              # Fixes the 'distuning' by forcing the driver to handle timing
-              "api.condition" = "if-exists";
-              "audio.format" = "S16LE"; 
-              "audio.rate" = 44100;
-            };
-          };
-        }
-      ];
-    };
-  };
-
 	security.sudo.extraConfig = ''
 		Defaults lecture=never
 	'';
@@ -150,6 +119,17 @@
     adw-gtk3
   ];
   programs.nix-ld.enable = true;
+
+  services.kmonad = {
+    enable = true;
+    keyboards = {
+      laptop-internal = {
+        device = "/dev/input/by-path/platform-i8042-serio-0-event-kbd";
+        
+        config = builtins.readFile ./lap-keyboard.kbd;
+      };
+    };
+  };
 
 
   time.timeZone = "Europe/London"; # Replace with your actual zone

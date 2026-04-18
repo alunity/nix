@@ -1,0 +1,53 @@
+(defcfg
+  input  (device-file "/dev/input/by-path/platform-i8042-serio-0-event-kbd")
+  output (uinput-sink "My KMonad output")
+  fallthrough true
+  allow-cmd true
+)
+
+(defsrc
+  1 2 3 4 5 6 7 8 9 0 - =
+  caps    esc     \
+  a       s       d       h       j       k       l
+  z       x       c
+  lsft    rsft
+)
+
+(defalias
+  ;; Media control aliases
+  prev-track  previoussong  ;; Correct KMonad media key
+  play-pause  playpause     ;; Correct KMonad media key
+  next-track  nextsong      ;; Correct KMonad media key
+
+  ;; prev-track (cmd-button "playerctl previous") 
+  ;; play-pause (cmd-button "playerctl play-pause") 
+  ;; next-track (cmd-button "playerctl next") 
+
+
+
+  ;; mute (cmd-button "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle")
+  ;; lower (cmd-button "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-")
+  ;; increase (cmd-button "wpctl set-volume @DEFAULT_AUDIO_SINK@ 6%+")
+  mute mininteresting
+  lower vold
+  increase volu
+  
+  ;; Special caps lock handling
+  caps-mod    (layer-toggle caps-layer)
+)
+
+(deflayer base
+  1 2 3 4 5 6 7 8 9 0 - =
+  @caps-mod  esc    \      ;; Changed to # for UK layout
+  a          s      d       h       j       k       l          
+  z          x      c
+  lsft      rsft
+)
+
+(deflayer caps-layer
+  KeyF1 KeyF2 KeyF3 KeyF4 KeyF5 KeyF6 KeyF7 KeyF8 KeyF9 KeyF10 KeyF11 KeyF12
+  _           `           nubs       
+  @prev-track @play-pause @next-track    KeyLeft KeyDown KeyUp KeyRight
+  @mute       @lower      @increase
+  caps        _         
+)
