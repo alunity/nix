@@ -25,16 +25,22 @@
     };
   };
 
-  outputs = { self, nixpkgs, disko, impermanence, sops-nix, lanzaboote, ... }@inputs: {
+  outputs = { self, nixpkgs, disko, impermanence, sops-nix, lanzaboote, home-manager, ... }@inputs: 
+  let 
+    system = "x86_64-linux";
+    pkgs = import nixpkgs {
+      inherit system;
+      config.allowUnfree = true;
+    };
+  in {
     nixosConfigurations.nixy = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
       specialArgs = { inherit inputs; };
       modules = [
         disko.nixosModules.disko
         impermanence.nixosModules.impermanence
         sops-nix.nixosModules.sops 
         lanzaboote.nixosModules.lanzaboote
-        inputs.home-manager.nixosModules.home-manager
+        home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
@@ -45,6 +51,12 @@
         ./disko-config.nix           # The drive layout we discussed
         ./hardware-configuration.nix # Generated on the machine
       ];
+    };
+
+    homeConfigurations."alunity" = home-manager.lib.homeManagerConfiguration {
+      inherit pkgs;
+      extraSpecialArgs = { inherit inputs; };
+      modules = [ ./home.nix ];
     };
   };
 }

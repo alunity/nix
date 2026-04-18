@@ -15,7 +15,6 @@
     tmux
     nerd-fonts.caskaydia-cove
     fish
-    home-manager
   ];
 
 
@@ -44,8 +43,8 @@
       
       font-family = "CaskaydiaCove Nerd Font";
       font-size = 12;
-      
-      # theme = "catppuccin-mocha";
+
+      theme = "Catppuccin Mocha";
       
       shell-integration-features = "ssh-env";
       
@@ -74,7 +73,7 @@
       # System Management
       ".." = "cd ..";
       nrs = "sudo nixos-rebuild switch --flake .#nixy";
-      hms = "home-manager switch --flake .#nixy";
+      hms = "home-manager switch --flake .#alunity";
       
       # Cleanup & Maintenance
       ngc = "nix-collect-garbage -d"; # Delete old generations to free space
