@@ -121,6 +121,7 @@
 
 
   time.timeZone = "Europe/London"; # Replace with your actual zone
+  i18n.defaultLocale = "en_GB.UTF-8";
   # services.automatic-timezoned.enable = true;
   # services.geoclue2.enable = true;
 
