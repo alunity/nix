@@ -15,6 +15,7 @@
     nerd-fonts.caskaydia-cove
     fish
     fastfetch
+    htop
   ];
 
   programs.chromium = {
