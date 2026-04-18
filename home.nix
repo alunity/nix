@@ -30,6 +30,8 @@
     btop
     fzf
     uv
+    ripgrep
+    unzip
   ];
 
   home.sessionVariables = {
