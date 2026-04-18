@@ -84,8 +84,7 @@
     pkiBundle = "/etc/secureboot"; # This folder MUST be persisted!
   };
 
-  boot.initrd.luks.devices."cryptroot" = {
-    device = "/dev/nvme0n1p2";
+  boot.initrd.luks.devices."crypted" = {
     preLVM = true;
     allowDiscards = true;
     # This is the magic line:

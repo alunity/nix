@@ -7,7 +7,6 @@
 
   # Install user-specific apps
   home.packages = with pkgs; [
-    google-chrome
     ghostty
     mpv
     git
@@ -18,6 +17,17 @@
     fastfetch
   ];
 
+  programs.chromium = {
+    enable = true;
+    # This tells the chromium module to use the official Google Chrome binary
+    package = pkgs.google-chrome; 
+    
+    commandLineArgs = [
+      "--enable-features=TouchpadOverscrollHistoryNavigation"
+      # If you are on Wayland, you often need this for gestures to work:
+      "--ozone-platform-hint=auto" 
+    ];
+  };
 
   home.sessionVariables = {
     EDITOR = "nvim";
@@ -74,7 +84,7 @@
       # System Management
       ".." = "cd ..";
       nrs = "sudo nixos-rebuild switch --flake .#nixy";
-      hms = "nix run home-manager -- switch --flake .#nixy";
+      hms = "nix run home-manager -- switch --flake .#alunity";
       
       # Cleanup & Maintenance
       ngc = "nix-collect-garbage -d"; # Delete old generations to free space
