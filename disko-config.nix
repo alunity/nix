@@ -3,7 +3,7 @@
     disk = {
       main = {
         type = "disk";
-        device = "/dev/nvme0n1"; # <-- CHANGE THIS to your actual disk
+        device = "/dev/nvme0n1";
         content = {
           type = "gpt";
           partitions = {
@@ -27,15 +27,21 @@
                   subvolumes = {
                     "/persist" = {
                       mountpoint = "/persist";
-                      mountOptions = [ "compress=zstd" "noatime" ];
+                      mountOptions = [
+                        "compress=zstd"
+                        "noatime"
+                      ];
                     };
                     "/nix" = {
                       mountpoint = "/nix";
-                      mountOptions = [ "compress=zstd" "noatime" ];
+                      mountOptions = [
+                        "compress=zstd"
+                        "noatime"
+                      ];
                     };
                     "/swap" = {
                       mountpoint = "/.swapvol";
-                      swap.swapfile.size = "16G"; # <-- MUCH BETTER
+                      swap.swapfile.size = "16G";
                     };
                   };
                 };
@@ -48,7 +54,7 @@
     nodev."/" = {
       fsType = "tmpfs";
       mountOptions = [
-        "size=4G"   
+        "size=4G"
         "mode=755"
       ];
     };

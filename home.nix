@@ -1,4 +1,5 @@
-{ config, pkgs,  ... }: {
+{ config, pkgs, ... }:
+{
   home.username = "alunity";
   home.homeDirectory = "/home/alunity";
   home.stateVersion = "24.11"; # Match your system stateVersion
@@ -8,7 +9,7 @@
   sops = {
     defaultSopsFile = ./secrets.yaml;
     validateSopsFiles = false;
-    
+
     # tell sops to look for the key on the persistent partition
     age.keyFile = "/persist/var/lib/sops-nix/key.txt";
 
@@ -63,20 +64,19 @@
 
   dconf.settings = {
     "org/gnome/settings-daemon/plugins/housekeeping" = {
-        donation-reminder-enabled = false;
+      donation-reminder-enabled = false;
     };
   };
-
 
   programs.chromium = {
     enable = true;
     # This tells the chromium module to use the official Google Chrome binary
-    package = pkgs.google-chrome; 
-    
+    package = pkgs.google-chrome;
+
     commandLineArgs = [
       "--enable-features=TouchpadOverscrollHistoryNavigation"
       # If you are on Wayland, you often need this for gestures to work:
-      "--ozone-platform-hint=auto" 
+      "--ozone-platform-hint=auto"
     ];
   };
 
@@ -101,18 +101,18 @@
   programs.ghostty = {
     enable = true;
     enableFishIntegration = true; # This handles the "correct path" magic
-    
+
     settings = {
       # Use the Nix-aware path for fish
       command = "${pkgs.fish}/bin/fish --login --interactive";
-      
+
       font-family = "CaskaydiaCove Nerd Font";
       font-size = 12;
 
       theme = "Catppuccin Mocha";
-      
+
       shell-integration-features = "ssh-env";
-      
+
       # Keybinds
       keybind = [
         "ctrl+shift+c=copy_to_clipboard"
@@ -126,7 +126,7 @@
 
   programs.fish = {
     enable = true;
-    
+
     # Standard Aliases
     shellAliases = {
       ls = "ls -l";
@@ -139,35 +139,34 @@
       ".." = "cd ..";
       nrs = "sudo nixos-rebuild switch --flake .#nixy";
       hms = "nix run home-manager -- switch --flake .#alunity";
-      
+
       # Cleanup & Maintenance
       ngc = "nix-collect-garbage -d"; # Delete old generations to free space
       nopt = "nix-store --optimise"; # Hard-link duplicate files to save space
-      
+
       # Searching & Running
       ns = "nix search nixpkgs";
       nr = "nix run nixpkgs#"; # Usage: nr hello
-      
+
       # Inspection
       nconf = "nvim /etc/nixos/configuration.nix";
       hconf = "nvim ~/.config/home-manager/home.nix";
     };
 
     interactiveShellInit = ''
-        set -g fish_greeting ""
-        # Enable Vim mode
-        fish_vi_key_bindings
+      set -g fish_greeting ""
+      # Enable Vim mode
+      fish_vi_key_bindings
 
-        # Optional: Set the cursor shapes for different modes
-        set fish_cursor_default block
-        set fish_cursor_insert line
-        set fish_cursor_replace_one underscore
-        set fish_cursor_visual block
+      # Optional: Set the cursor shapes for different modes
+      set fish_cursor_default block
+      set fish_cursor_insert line
+      set fish_cursor_replace_one underscore
+      set fish_cursor_visual block
 
-        nix-your-shell fish | source
-      '';
+      nix-your-shell fish | source
+    '';
   };
-
 
   programs.git = {
     enable = true;
@@ -186,13 +185,13 @@
     enable = true;
 
     shell = "${pkgs.fish}/bin/fish";
-    
+
     # --- Basic Settings ---
-    shortcut = "a";          # Replaces unbind C-b and set-option -g prefix C-a
-    baseIndex = 1;           # set -g base-index 1
-    mouse = true;            # setw -g mouse on
-    keyMode = "vi";          # set-window-option -g mode-keys vi
-    escapeTime = 0;          # set -s escape-time 0
+    shortcut = "a"; # Replaces unbind C-b and set-option -g prefix C-a
+    baseIndex = 1; # set -g base-index 1
+    mouse = true; # setw -g mouse on
+    keyMode = "vi"; # set-window-option -g mode-keys vi
+    escapeTime = 0; # set -s escape-time 0
     terminal = "screen-256color"; # set-option -g default-terminal
 
     # --- Extra Configuration (Bindings and UI) ---
