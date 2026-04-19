@@ -141,6 +141,8 @@
   # services.automatic-timezoned.enable = true;
   # services.geoclue2.enable = true;
 
+  services.printing.enable = true;
+
   system.stateVersion = "24.11"; # Ensure this matches your nixpkgs!
 
 }
