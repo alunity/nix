@@ -14,18 +14,6 @@
     };
   };
 
-  # Enable hardware acceleration
-  hardware.graphics = {
-    enable = true;
-    extraPackages = with pkgs; [
-      intel-media-driver # For Broadwell and newer (Meteor Lake included)
-      intel-vaapi-driver # VA-API for older software
-      libvdpau-va-gl
-      intel-compute-runtime # OpenCL for Arc Graphics
-      vpl-gpu-rt # OneVPL for hardware video processing
-    ];
-  };
-
   nix.settings.experimental-features = [ "nix-command" "flakes"];
   nixpkgs.config.allowUnfree = true;
 
@@ -50,6 +38,18 @@
   };
 
 	users.users.root.hashedPasswordFile=config.sops.secrets.user-password.path;
+
+  # Enable hardware acceleration
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [
+      intel-media-driver # For Broadwell and newer (Meteor Lake included)
+      intel-vaapi-driver # VA-API for older software
+      libvdpau-va-gl
+      intel-compute-runtime # OpenCL for Arc Graphics
+      vpl-gpu-rt # OneVPL for hardware video processing
+    ];
+  };
 
   services.xserver.enable = true;
   services.displayManager.gdm.enable = true;
