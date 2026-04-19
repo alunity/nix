@@ -39,12 +39,15 @@
     anki
     opencode
     spotify
+    nixd
+    nixfmt
   ];
 
   home.sessionVariables = {
     EDITOR = "nvim";
     SOPS_AGE_KEY_FILE = "/persist/var/lib/sops-nix/key.txt";
     MOODLE_TOKEN = "$(cat ${config.sops.secrets.moodle-token.path})";
+    NIXOS_OZONE_WL = "1";
   };
 
   programs.gnome-shell = {
@@ -60,7 +63,7 @@
 
   dconf.settings = {
     "org/gnome/settings-daemon/plugins/housekeeping" = {
-      donation-reminder-enabled = false;
+        donation-reminder-enabled = false;
     };
   };
 
@@ -239,16 +242,16 @@
   programs.vicinae = {
     enable = true;
     systemd.enable = true;
-    # settings = {
-    #   hotkey = "Super+d";
-    #   theme = "dark";
-    # };
+  };
+
+  programs.vscode = {
+    enable = true;
+    package = pkgs.vscode.fhs;
   };
 
   services.easyeffects = {
     enable = true;
   };
-
 
   fonts.fontconfig.enable = true;
 }
