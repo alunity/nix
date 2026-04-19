@@ -152,6 +152,31 @@
     gnome-tweaks
     adw-gtk3
   ];
+
+  fonts.packages = with pkgs; [
+    noto-fonts
+    noto-fonts-cjk-sans
+    noto-fonts-cjk-serif
+    noto-fonts-color-emoji
+    liberation_ttf
+    fira-code
+    fira-code-symbols
+    mplus-outline-fonts.githubRelease
+    dina-font
+    proggyfonts
+    wqy_zenhei
+  ];
+
+  # It tells your system which fonts to prefer for specific types of text.
+  fonts.fontconfig = {
+    defaultFonts = {
+      serif = [ "Noto Serif" "Noto Serif CJK SC" ];
+      sansSerif = [ "Noto Sans" "Noto Sans CJK SC" ];
+      monospace = [ "JetBrains Mono" "Noto Sans Mono CJK SC" ];
+      emoji = [ "Noto Color Emoji" ];
+    };
+  };
+
   programs.nix-ld.enable = true;
 
   services.kmonad = {
