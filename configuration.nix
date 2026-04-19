@@ -14,7 +14,20 @@
     };
   };
 
-  nix.settings.experimental-features = [ "nix-command" "flakes"];
+  nix = {
+    settings = {
+      # Deduplicate storage (saves space by linking identical files)
+      auto-optimise-store = true;
+      # Allow the flake command to work
+      experimental-features = [ "nix-command" "flakes" ];
+    };
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 7d";
+    };
+  };
+
   nixpkgs.config.allowUnfree = true;
 
   networking.networkmanager.enable = true;
@@ -22,9 +35,30 @@
   
   services.thermald.enable = true;
 
-  # 2. Power management (Better battery life)
-  # NOTE: Don't use this if you plan to use 'tlp' - they conflict.
-  services.power-profiles-daemon.enable = true; 
+  services.power-profiles-daemon.enable = false;
+
+  services.tlp = {
+    enable = true;
+    pd.enable = true; 
+
+    settings = {
+      # Huawei MateBook specific thresholds (via huawei_wmi driver)
+      START_CHARGE_THRESH_BAT0 = 75;
+      STOP_CHARGE_THRESH_BAT0 = 80;
+
+      # Intel Core Ultra 5 (Meteor Lake) Optimizations
+      # These mimic what PPD would normally do, but through TLP
+      CPU_SCALING_GOVERNOR_ON_AC = "performance";
+      CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
+      
+      CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
+      CPU_ENERGY_PERF_POLICY_ON_BAT = "balance_power";
+
+      # Helps with Intel's modern "Meteor Lake" efficiency
+      CPU_BOOST_ON_AC = 1;
+      CPU_BOOST_ON_BAT = 0;
+    };
+  };
 
   # 3. Firmware (Crucial for Wi-Fi and GPU microcode)
   hardware.enableRedistributableFirmware = true;

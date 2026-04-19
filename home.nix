@@ -36,6 +36,9 @@
     wget
     curl
     prismlauncher
+    anki
+    opencode
+    spotify
   ];
 
   home.sessionVariables = {
@@ -50,8 +53,17 @@
       { package = pkgs.gnomeExtensions.blur-my-shell; }
       { package = pkgs.gnomeExtensions.system-monitor; }
       { package = pkgs.gnomeExtensions.keep-awake; }
+      { package = pkgs.gnomeExtensions.appindicator; }
+      { package = pkgs.gnomeExtensions.vicinae; }
     ];
   };
+
+  dconf.settings = {
+    "org/gnome/settings-daemon/plugins/housekeeping" = {
+      donation-reminder-enabled = false;
+    };
+  };
+
 
   programs.chromium = {
     enable = true;
@@ -222,6 +234,15 @@
     extraConfig = ''
       set completion-ignore-case on
     '';
+  };
+
+  programs.vicinae = {
+    enable = true;
+    systemd.enable = true;
+    # settings = {
+    #   hotkey = "Super+d";
+    #   theme = "dark";
+    # };
   };
 
   services.easyeffects = {
