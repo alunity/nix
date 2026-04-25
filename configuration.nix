@@ -215,7 +215,7 @@
     "en_US.UTF-8/UTF-8"
   ];
   # services.automatic-timezoned.enable = true;
-  # services.geoclue2.enable = true;
+  services.geoclue2.enable = true;
 
   services.printing = {
     enable = true;
