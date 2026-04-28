@@ -161,6 +161,7 @@
     gnome-tweaks
     adw-gtk3
   ];
+  services.tailscale.enable = true;
 
   fonts.packages = with pkgs; [
     noto-fonts
@@ -217,9 +218,14 @@
   # services.automatic-timezoned.enable = true;
   services.geoclue2.enable = true;
 
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    openFirewall = true;
+  };
+
   services.printing = {
     enable = true;
-    cups-pdf.enable = true;
   };
 
   system.stateVersion = "24.11"; # Ensure this matches your nixpkgs!
