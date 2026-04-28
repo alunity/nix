@@ -42,6 +42,7 @@
     spotify
     nixd
     nixfmt
+    qbittorrent-enhanced
   ];
 
   home.sessionVariables = {
