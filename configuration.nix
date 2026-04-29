@@ -77,6 +77,8 @@
       "wheel"
       "networkmanager"
       "video"
+      "scanner"
+      "lp"
     ];
     # instead of hashedpassword, use hashedpasswordfile
     hashedPasswordFile = config.sops.secrets.user-password.path;
@@ -227,6 +229,13 @@
   services.printing = {
     enable = true;
   };
+
+  hardware.sane = {
+    enable = true;
+    extraBackends = [ pkgs.sane-airscan ];
+  };
+
+  services.udev.packages = [ pkgs.sane-airscan ];
 
   system.stateVersion = "24.11"; # Ensure this matches your nixpkgs!
 }
