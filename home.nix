@@ -134,7 +134,7 @@
       # System Management
       ".." = "cd ..";
       nrs = "sudo nixos-rebuild switch --flake .#nixy";
-      hms = "nix run home-manager -- switch --flake .#alunity";
+      # hms = "nix run home-manager -- switch --flake .#alunity";
 
       # Cleanup & Maintenance
       ngc = "nix-collect-garbage -d"; # Delete old generations to free space
@@ -143,10 +143,6 @@
       # Searching & Running
       ns = "nix search nixpkgs";
       nr = "nix run nixpkgs#"; # Usage: nr hello
-
-      # Inspection
-      nconf = "nvim /etc/nixos/configuration.nix";
-      hconf = "nvim ~/.config/home-manager/home.nix";
     };
 
     interactiveShellInit = ''

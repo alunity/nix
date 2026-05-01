@@ -52,7 +52,7 @@
             home-manager.users.alunity = {
               imports = [
                 ./home.nix
-                inputs.sops-nix.homeManagerModules.sops # Add the HM module here
+                inputs.sops-nix.homeManagerModules.sops
               ];
             };
             home-manager.extraSpecialArgs = { inherit inputs; };
@@ -61,16 +61,6 @@
           ./configuration.nix
           ./disko-config.nix
           ./hardware-configuration.nix
-        ];
-      };
-
-      # 2. Standalone Home Manager (home-manager switch)
-      homeConfigurations."alunity" = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        extraSpecialArgs = { inherit inputs; };
-        modules = [
-          ./home.nix
-          inputs.sops-nix.homeManagerModules.sops
         ];
       };
     };

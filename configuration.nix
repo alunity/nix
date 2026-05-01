@@ -187,6 +187,7 @@
 
   # It tells your system which fonts to prefer for specific types of text.
   fonts.fontconfig = {
+    enable = true;
     defaultFonts = {
       serif = [
         "Noto Serif"
@@ -203,6 +204,7 @@
       emoji = [ "Noto Color Emoji" ];
     };
   };
+
 
   programs.nix-ld.enable = true;
 
