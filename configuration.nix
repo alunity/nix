@@ -159,7 +159,7 @@
 
   environment.systemPackages = with pkgs; [
     nixd
-    nixfmt-rfc-style
+    nixfmt
     nix-tree
 
     sbctl
