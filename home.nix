@@ -37,10 +37,8 @@
     anki
     opencode
     spotify
-    nixd
-    nixfmt
     qbittorrent-enhanced
-  ];
+    ];
 
   home.sessionVariables = {
     EDITOR = "nvim";

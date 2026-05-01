@@ -158,8 +158,13 @@
   };
 
   environment.systemPackages = with pkgs; [
+    nixd
+    nixfmt-rfc-style
+    nix-tree
+
     sbctl
     sops
+
     gnome-tweaks
     adw-gtk3
   ];
