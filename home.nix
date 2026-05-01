@@ -38,7 +38,7 @@
     opencode
     spotify
     qbittorrent-enhanced
-    ];
+  ];
 
   home.sessionVariables = {
     EDITOR = "nvim";
