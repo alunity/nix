@@ -45,8 +45,6 @@
           inputs.sops-nix.nixosModules.sops
           inputs.lanzaboote.nixosModules.lanzaboote
 
-          # Keep this if you want HM to be part of the system build,
-          # or remove it to keep them 100% isolated.
           inputs.home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;

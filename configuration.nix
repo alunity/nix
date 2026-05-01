@@ -163,7 +163,7 @@
     gnome-tweaks
     adw-gtk3
   ];
-  services.tailscale.enable = true;
+  services.tailscale.enable = false;
 
   fonts.packages = with pkgs; [
     noto-fonts
@@ -171,6 +171,7 @@
     noto-fonts-cjk-serif
     noto-fonts-color-emoji
     liberation_ttf
+    nerd-fonts.caskaydia-cove
     fira-code
     fira-code-symbols
     mplus-outline-fonts.githubRelease

@@ -19,19 +19,16 @@
   # Install user-specific apps
   home.packages = with pkgs; [
     ghostty
-    mpv
+    # mpv
     git
     neovim
     tmux
-    nerd-fonts.caskaydia-cove
     fish
     fastfetch
     htop
     nix-your-shell
     btop
     fzf
-    uv
-    cargo
     ripgrep
     unzip
     wget
