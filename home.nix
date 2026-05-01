@@ -38,6 +38,7 @@
     opencode
     spotify
     qbittorrent-enhanced
+    newsflash
   ];
 
   home.sessionVariables = {
