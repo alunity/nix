@@ -34,6 +34,7 @@
     wget
     curl
     prismlauncher
+    dolphin-emu
     anki
     opencode
     spotify
