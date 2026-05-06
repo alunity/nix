@@ -40,6 +40,7 @@
     spotify
     qbittorrent-enhanced
     newsflash
+    thunderbird
   ];
 
   home.sessionVariables = {
