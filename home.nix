@@ -216,8 +216,9 @@
     '';
   };
 
-  home.file = {
-  };
+  home.file.".haskeline".text = ''
+    editMode: Vi
+  '';
 
   programs.readline = {
     enable = true;
