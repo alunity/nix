@@ -5,17 +5,12 @@
   ...
 }:
 {
-  sops = {
-    defaultSopsFile = ./secrets.yaml;
-    validateSopsFiles = false;
+  imports = [
+    ../../modules/sops.nix
+  ];
 
-    # this is critical for ephemeral systems:
-    # tell sops to look for the key on the persistent partition
-    age.keyFile = "/persist/var/lib/sops-nix/key.txt";
-
-    secrets.user-password = {
-      neededForUsers = true; # required so it's available at login
-    };
+  sops.secrets.user-password = {
+    neededForUsers = true;
   };
 
   nix = {
@@ -206,7 +201,6 @@
     };
   };
 
-
   programs.nix-ld.enable = true;
 
   services.kmonad = {
@@ -215,7 +209,7 @@
       laptop-internal = {
         device = "/dev/input/by-path/platform-i8042-serio-0-event-kbd";
 
-        config = builtins.readFile ./lap-keyboard.kbd;
+        config = builtins.readFile ../../config/lap-keyboard.kbd;
       };
     };
   };

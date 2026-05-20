@@ -51,16 +51,16 @@
             home-manager.useUserPackages = true;
             home-manager.users.alunity = {
               imports = [
-                ./home.nix
+                ./users/alunity/home.nix
                 inputs.sops-nix.homeManagerModules.sops
               ];
             };
             home-manager.extraSpecialArgs = { inherit inputs; };
           }
 
-          ./configuration.nix
-          ./disko-config.nix
-          ./hardware-configuration.nix
+          ./hosts/nixy/configuration.nix
+          ./hosts/nixy/disko-config.nix
+          ./hosts/nixy/hardware-configuration.nix
         ];
       };
     };

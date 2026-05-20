@@ -1,20 +1,16 @@
 { config, pkgs, ... }:
 {
+  imports = [
+    ../../modules/sops.nix
+  ];
+
   home.username = "alunity";
   home.homeDirectory = "/home/alunity";
   home.stateVersion = "24.11"; # Match your system stateVersion
 
   programs.home-manager.enable = true;
 
-  sops = {
-    defaultSopsFile = ./secrets.yaml;
-    validateSopsFiles = false;
-
-    # tell sops to look for the key on the persistent partition
-    age.keyFile = "/persist/var/lib/sops-nix/key.txt";
-
-    secrets.moodle-token = { };
-  };
+  sops.secrets.moodle-token = { };
 
   # Install user-specific apps
   home.packages = with pkgs; [
