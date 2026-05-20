@@ -7,6 +7,7 @@
 {
   imports = [
     ../../modules/sops.nix
+    ../../modules/system/desktop.nix
   ];
 
   sops.secrets.user-password = {
@@ -93,10 +94,7 @@
     ];
   };
 
-  services.xserver.enable = true;
-  services.displayManager.gdm.enable = true;
-  services.desktopManager.gnome.enable = true;
-  environment.sessionVariables.NIXOS_OZONE_WL = "1";
+  my.desktop.xfce.enable = true;
   services.libinput.enable = true; # For touchpads
 
   services.xserver.xkb = {
