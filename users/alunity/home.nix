@@ -166,6 +166,7 @@
         email = "75143943+alunity@users.noreply.github.com";
       };
       init.defaultBranch = "main";
+      push.autoSetupRemote = true;
     };
 
     signing.format = null;
