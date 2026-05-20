@@ -101,6 +101,7 @@
   services.xserver.enable = true;
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
   services.libinput.enable = true; # For touchpads
 
   services.xserver.xkb = {

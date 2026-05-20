@@ -47,7 +47,6 @@
     EDITOR = "nvim";
     SOPS_AGE_KEY_FILE = "/persist/var/lib/sops-nix/key.txt";
     MOODLE_TOKEN = "$(cat ${config.sops.secrets.moodle-token.path})";
-    NIXOS_OZONE_WL = "1";
   };
 
   programs.gnome-shell = {
