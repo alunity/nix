@@ -41,6 +41,7 @@ in
       home.packages = [
         indigoMagicDark
         pkgs.chicago95
+        pkgs.xfce4-cpufreq-plugin
       ];
 
       # Apply it to GTK applications
@@ -136,6 +137,7 @@ in
             6
             5
             19
+            20
             1
             8
             10
@@ -184,6 +186,7 @@ in
           "plugins/plugin-17" = "separator";
           "plugins/plugin-18" = "directorymenu";
           "plugins/plugin-19" = "power-manager-plugin";
+          "plugins/plugin-20" = "cpufreq";
         };
       };
 

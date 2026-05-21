@@ -95,7 +95,7 @@
     ];
   };
 
-  my.desktop.xfce.enable = true;
+  my.desktop.gnome.enable = true;
   services.libinput.enable = true; # For touchpads
   services.libinput.touchpad.naturalScrolling = true;
 
