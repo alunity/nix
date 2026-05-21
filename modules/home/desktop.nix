@@ -78,7 +78,7 @@ in
           "commands/custom/<Alt>c" = "google-chrome-stable";
           "commands/custom/<Alt>d" = "xfce4-appfinder";
           "commands/custom/<Alt><Shift>s" = "xfce4-screenshooter -r -c";
-          "commands/custom/<Alt><Shift>equal" = "systemctl suspend";
+          "commands/custom/<Alt><Shift>plus" = "systemctl suspend";
 
           # Window Manager Shortcuts
           "xfwm4/custom/<Alt>F4" = ""; # Explicitly unbind the default
