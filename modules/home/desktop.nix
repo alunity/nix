@@ -31,8 +31,42 @@ in
   config = lib.mkMerge [
     # --- GNOME Home Manager Configuration ---
     (lib.mkIf sysCfg.gnome.enable {
-      # You could add GNOME extensions, dconf settings, etc. here
-      # For example, what you currently have in home.nix could be moved here later
+      home.packages = with pkgs; [
+        adwaita-icon-theme
+        gnome-themes-extra
+      ];
+
+      # This fixes the "square cursor" and sets a sane GTK theme
+      gtk = {
+        enable = true;
+        theme = {
+          name = "adw-gtk3-dark";
+          package = pkgs.adw-gtk3;
+        };
+        cursorTheme = {
+          name = "Adwaita";
+          package = pkgs.adwaita-icon-theme;
+          size = 24;
+        };
+        iconTheme = {
+          name = "Adwaita";
+          package = pkgs.adwaita-icon-theme;
+        };
+        gtk4.theme = null;
+      };
+
+      # Tell GNOME specifically to use these via dconf
+      dconf.settings = {
+        "org/gnome/desktop/interface" = {
+          color-scheme = "prefer-dark";
+          cursor-theme = "Adwaita";
+          gtk-theme = "adw-gtk3-dark";
+          icon-theme = "Adwaita";
+        };
+        "org/gnome/desktop/wm/preferences" = {
+          button-layout = "appmenu:minimize,maximize,close";
+        };
+      };
     })
 
     # --- XFCE Home Manager Configuration ---
