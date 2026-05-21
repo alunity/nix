@@ -46,17 +46,17 @@
           inputs.lanzaboote.nixosModules.lanzaboote
 
           inputs.home-manager.nixosModules.home-manager
-          {
+          ({ config, ... }: {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.alunity = {
+            home-manager.users.${config.my.core.username} = {
               imports = [
                 ./users/alunity/home.nix
                 inputs.sops-nix.homeManagerModules.sops
               ];
             };
             home-manager.extraSpecialArgs = { inherit inputs; };
-          }
+          })
 
           ./hosts/nixy/configuration.nix
           ./hosts/nixy/disko-config.nix

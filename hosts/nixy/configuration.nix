@@ -7,6 +7,7 @@
 {
   imports = [
     ../../modules/sops.nix
+    ../../modules/system/core.nix
     ../../modules/system/desktop.nix
   ];
 
@@ -67,7 +68,7 @@
   hardware.enableRedistributableFirmware = true;
 
   # 2. use the secret for your user
-  users.users.alunity = {
+  users.users.${config.my.core.username} = {
     isNormalUser = true;
     extraGroups = [
       "wheel"
@@ -96,6 +97,7 @@
 
   my.desktop.xfce.enable = true;
   services.libinput.enable = true; # For touchpads
+  services.libinput.touchpad.naturalScrolling = true;
 
   services.xserver.xkb = {
     layout = "gb";
@@ -144,7 +146,7 @@
       "/var/lib/sops-nix"
       "/var/lib/gdm"
       "/var/lib/accounts-service"
-      "/home/alunity"
+      "/home/${config.my.core.username}"
     ];
     files = [
       "/etc/machine-id"

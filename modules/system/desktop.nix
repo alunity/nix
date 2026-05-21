@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.my.desktop; # A shorthand to access our custom options
@@ -23,7 +28,18 @@ in
     # --- XFCE Configuration ---
     (lib.mkIf cfg.xfce.enable {
       services.xserver.enable = true;
-      services.xserver.displayManager.lightdm.enable = true;
+      services.displayManager.defaultSession = "xfce";
+      services.xserver.displayManager.lightdm = {
+        enable = true;
+        greeters.mini = {
+          enable = true;
+          user = "alunity"; # It will just prompt for your password
+          extraConfig = ''
+            [greeter]
+            show-password-label = false
+          '';
+        };
+      };
       services.xserver.desktopManager.xfce.enable = true;
     })
   ];

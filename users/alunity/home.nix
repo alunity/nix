@@ -1,11 +1,12 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, osConfig, ... }:
 {
   imports = [
     ../../modules/sops.nix
+    ../../modules/home/desktop.nix
   ];
 
-  home.username = "alunity";
-  home.homeDirectory = "/home/alunity";
+  home.username = lib.mkDefault osConfig.my.core.username;
+  home.homeDirectory = lib.mkDefault "/home/${osConfig.my.core.username}";
   home.stateVersion = "24.11"; # Match your system stateVersion
 
   programs.home-manager.enable = true;
@@ -107,6 +108,9 @@
 
       shell-integration-features = "ssh-env";
 
+      # Use server-side decorations (XFWM4's titlebars) instead of GNOME's flat GTK CSD
+      window-decoration = "server";
+
       # Keybinds
       keybind = [
         "ctrl+shift+c=copy_to_clipboard"
@@ -162,7 +166,7 @@
     enable = true;
     settings = {
       user = {
-        name = "alunity";
+        name = osConfig.my.core.username;
         email = "75143943+alunity@users.noreply.github.com";
       };
       init.defaultBranch = "main";
