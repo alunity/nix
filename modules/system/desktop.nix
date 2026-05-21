@@ -44,6 +44,10 @@ in
 
       hardware.bluetooth.enable = true;
       services.blueman.enable = true;
+
+      # Power management optimizations for XFCE
+      services.upower.enable = true;
+      services.tlp.settings.CPU_BOOST_ON_BAT = lib.mkForce 0;
     })
   ];
 }

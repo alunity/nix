@@ -66,6 +66,7 @@ in
           # XFCE Window Manager theme
           "general/theme" = "IndigoMagicDark";
           "general/workspace_count" = 4;
+          "general/use_compositing" = false;
         };
         xsettings = {
           # GTK Theme Name for XFCE sessions
@@ -196,6 +197,12 @@ in
           day = 6500;
           night = 3500;
         };
+      };
+
+      services.picom = {
+        enable = true;
+        backend = "glx";
+        vSync = true;
       };
 
       xdg.portal = {
