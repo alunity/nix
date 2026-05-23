@@ -146,6 +146,7 @@
       "/var/lib/sops-nix"
       "/var/lib/gdm"
       "/var/lib/accounts-service"
+      "/var/lib/flatpak"
       "/home/${config.my.core.username}"
     ];
     files = [
@@ -239,6 +240,7 @@
   };
 
   services.udev.packages = [ pkgs.sane-airscan ];
+  services.flatpak.enable = true;
 
   system.stateVersion = "24.11"; # Ensure this matches your nixpkgs!
 }

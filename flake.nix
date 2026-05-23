@@ -17,6 +17,8 @@
       url = "github:nix-community/lanzaboote";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nix-flatpak.url = "github:gmodena/nix-flatpak";
   };
 
   outputs =
@@ -46,17 +48,22 @@
           inputs.lanzaboote.nixosModules.lanzaboote
 
           inputs.home-manager.nixosModules.home-manager
-          ({ config, ... }: {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.${config.my.core.username} = {
-              imports = [
-                ./users/alunity/home.nix
-                inputs.sops-nix.homeManagerModules.sops
-              ];
-            };
-            home-manager.extraSpecialArgs = { inherit inputs; };
-          })
+          inputs.nix-flatpak.nixosModules.nix-flatpak
+          (
+            { config, ... }:
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.${config.my.core.username} = {
+                imports = [
+                  ./users/alunity/home.nix
+                  inputs.sops-nix.homeManagerModules.sops
+                  inputs.nix-flatpak.homeManagerModules.nix-flatpak
+                ];
+              };
+              home-manager.extraSpecialArgs = { inherit inputs; };
+            }
+          )
 
           ./hosts/nixy/configuration.nix
           ./hosts/nixy/disko-config.nix
