@@ -159,6 +159,8 @@
       # Searching & Running
       ns = "nix search nixpkgs";
       nr = "nix run nixpkgs#"; # Usage: nr hello
+
+      x = "xdg-open";
     };
 
     interactiveShellInit = ''
