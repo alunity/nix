@@ -37,6 +37,7 @@
     wget
     curl
     prismlauncher
+    osu-lazer-bin
     dolphin-emu
     anki
     opencode
