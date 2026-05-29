@@ -45,9 +45,31 @@ in
       hardware.bluetooth.enable = true;
       services.blueman.enable = true;
 
-      # Power management optimizations for XFCE
+      # Power management optimizations for XFCE (Fanless-style throttling)
       services.upower.enable = true;
-      services.tlp.settings.CPU_BOOST_ON_BAT = lib.mkForce 0;
+      services.tlp.settings = {
+        # Disable CPU Boost completely
+        CPU_BOOST_ON_AC = lib.mkForce 0;
+        CPU_BOOST_ON_BAT = lib.mkForce 0;
+
+        # Hard cap the maximum performance (Frequency Ceiling)
+        # 30% on AC, 20% on Battery - keeps the laptop cool and fan-silent
+        CPU_MAX_PERF_ON_AC = lib.mkForce 30;
+        CPU_MAX_PERF_ON_BAT = lib.mkForce 20;
+
+        # Force aggressive power saving energy policies
+        CPU_ENERGY_PERF_POLICY_ON_AC = lib.mkForce "power";
+        CPU_ENERGY_PERF_POLICY_ON_BAT = lib.mkForce "power";
+
+        # Lower GPU clocks to reduce heat from the graphics chip
+        INTEL_GPU_MIN_FREQ_ON_AC = lib.mkForce 300;
+        INTEL_GPU_MAX_FREQ_ON_AC = lib.mkForce 600;
+        INTEL_GPU_MIN_FREQ_ON_BAT = lib.mkForce 300;
+        INTEL_GPU_MAX_FREQ_ON_BAT = lib.mkForce 400;
+      };
+
+      # Thermald helps with passive cooling (throttling instead of fans)
+      services.thermald.enable = true;
       services.cpupower-gui.enable = true;
     })
   ];

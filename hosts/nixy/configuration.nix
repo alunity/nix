@@ -9,6 +9,7 @@
     ../../modules/sops.nix
     ../../modules/system/core.nix
     ../../modules/system/desktop.nix
+    ../../modules/system/virtualisation.nix
   ];
 
   sops.secrets.user-password = {
