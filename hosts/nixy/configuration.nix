@@ -148,6 +148,7 @@
       "/var/lib/gdm"
       "/var/lib/accounts-service"
       "/var/lib/flatpak"
+      "/var/lib/libvirt"
       "/home/${config.my.core.username}"
     ];
     files = [
