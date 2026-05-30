@@ -105,6 +105,25 @@ in
   services.openssh = {
     enable = true;
 
+    hostKeys = [
+      {
+        path = "/etc/ssh/ssh_host_ed25519_key";
+        type = "ed25519";
+      }
+    ];
+
+    # Only listen on the VM bridge and internal localhost
+    listenAddresses = [
+      {
+        addr = "192.168.122.1";
+        port = 22;
+      }
+      {
+        addr = "127.0.0.1";
+        port = 22;
+      }
+    ];
+
     settings = {
       # Disallow root login for security. You will log in as 'alunity'
       PermitRootLogin = "no";
@@ -118,9 +137,9 @@ in
   services.logind = {
     # Force the host to completely ignore the lid closing if plugged into a dock/power
     settings.Login = {
-        HandleLidSwitch = "suspend";
-        HandleLidSwitchExternalPower = "ignore";
-      };
+      HandleLidSwitch = "suspend";
+      HandleLidSwitchExternalPower = "ignore";
+    };
   };
 
   # Explicitly open port 22 in the firewall

@@ -138,6 +138,7 @@
     hideMounts = true;
     directories = [
       "/etc/secureboot"
+      "/etc/ssh"
       "/var/lib/sbctl" # The metadata database (Fixes the migrate error)
       "/var/log"
       "/var/lib/bluetooth"
