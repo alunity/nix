@@ -125,12 +125,8 @@ in
     ];
 
     settings = {
-      # Disallow root login for security. You will log in as 'alunity'
       PermitRootLogin = "no";
-
-      # Set to 'false' if you have SSH keys set up on your phone.
-      # If you just want to use your user password for now, leave it 'true'.
-      PasswordAuthentication = true;
+      PasswordAuthentication = false;
     };
   };
 
