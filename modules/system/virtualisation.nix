@@ -96,8 +96,50 @@ in
       "kvm"
     ];
   };
+
   # Link the script to the location Libvirt expects
   systemd.tmpfiles.rules = [
     "L+ /var/lib/libvirt/hooks/qemu - - - - ${qemu-hook}"
   ];
+
+  services.openssh = {
+    enable = true;
+
+    settings = {
+      # Disallow root login for security. You will log in as 'alunity'
+      PermitRootLogin = "no";
+
+      # Set to 'false' if you have SSH keys set up on your phone.
+      # If you just want to use your user password for now, leave it 'true'.
+      PasswordAuthentication = true;
+    };
+  };
+
+  services.logind = {
+    # Force the host to completely ignore the lid closing if plugged into a dock/power
+    settings.Login = {
+        HandleLidSwitch = "suspend";
+        HandleLidSwitchExternalPower = "ignore";
+      };
+  };
+
+  # Explicitly open port 22 in the firewall
+  networking.firewall.allowedTCPPorts = [ 22 ];
+
+  # 1. Create a permanent symlink at /dev/input/kmonad-kbd
+  services.udev.extraRules = ''
+    KERNEL=="event*", ATTRS{name}=="My KMonad output", SYMLINK+="input/kmonad-kbd"
+  '';
+
+  # 2. Whitelist that new permanent path in QEMU
+  virtualisation.libvirtd.qemu.verbatimConfig = ''
+    cgroup_device_acl = [
+      "/dev/null", "/dev/full", "/dev/zero",
+      "/dev/random", "/dev/urandom",
+      "/dev/ptmx", "/dev/kvm", "/dev/kqemu",
+      "/dev/rtc", "/dev/hpet",
+      "/dev/input/by-path/pci-0000:00:15.0-platform-i2c_designware.0-event-mouse",
+      "/dev/input/kmonad-kbd"
+    ]
+  '';
 }
