@@ -112,18 +112,6 @@ in
       }
     ];
 
-    # Only listen on the VM bridge and internal localhost
-    listenAddresses = [
-      {
-        addr = "192.168.122.1";
-        port = 22;
-      }
-      {
-        addr = "127.0.0.1";
-        port = 22;
-      }
-    ];
-
     settings = {
       PermitRootLogin = "no";
       PasswordAuthentication = false;
@@ -139,7 +127,17 @@ in
   };
 
   # Explicitly open port 22 in the firewall
-  networking.firewall.allowedTCPPorts = [ 22 ];
+  networking.firewall = {
+    enable = true;
+
+    # Make sure 22 is NOT in this global list anymore
+    allowedTCPPorts = [
+      # your other ports, but not 22
+    ];
+
+    # Explicitly allow SSH ONLY on the libvirt bridge (virbr0)
+    interfaces."virbr0".allowedTCPPorts = [ 22 ];
+  };
 
   # 1. Create a permanent symlink at /dev/input/kmonad-kbd
   services.udev.extraRules = ''
