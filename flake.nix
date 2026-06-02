@@ -42,6 +42,14 @@
         inherit system;
         specialArgs = { inherit inputs; };
         modules = [
+          (
+            { pkgs, ... }:
+            {
+              nixpkgs.overlays = [
+                (import ./modules/home/spotify-overlay.nix)
+              ];
+            }
+          )
           inputs.disko.nixosModules.disko
           inputs.impermanence.nixosModules.impermanence
           inputs.sops-nix.nixosModules.sops
