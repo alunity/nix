@@ -44,13 +44,6 @@
     thunderbird
   ];
 
-  services.flatpak = {
-    enable = true;
-
-    packages = [
-      "org.vinegarhq.Sober"
-    ];
-  };
   home.sessionVariables = {
     EDITOR = "nvim";
     SOPS_AGE_KEY_FILE = "/persist/var/lib/sops-nix/key.txt";

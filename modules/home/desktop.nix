@@ -26,6 +26,64 @@ let
       cp -r gtk-2.0 gtk-3.0 xfwm4 $out/share/themes/IndigoMagicDark/
     '';
   };
+
+  # Replace the old platinum9Theme block with this:
+  macos9Theme = pkgs.stdenvNoCC.mkDerivation {
+    pname = "macos9-theme";
+    version = "master";
+    src = pkgs.fetchFromGitHub {
+      owner = "B00merang-Project";
+      repo = "Mac-OS-9";
+      rev = "master";
+      hash = "sha256-gMyLP+7rZdhlCZVVHjzvWvQzvWSLfNZWCvgFUWuMeyw="; # Let it fail to give you the real SRI hash
+    };
+    installPhase = ''
+      mkdir -p $out/share/themes
+      if [ -d "Mac-OS-9" ]; then
+        cp -a Mac-OS-9 $out/share/themes/
+      else
+        mkdir -p $out/share/themes/Mac-OS-9
+        cp -a * $out/share/themes/Mac-OS-9/
+      fi
+    '';
+  };
+
+  chiNataIcons = pkgs.stdenvNoCC.mkDerivation {
+    pname = "chi-nata-icons";
+    version = "main";
+    src = pkgs.fetchFromGitHub {
+      owner = "DawnVespero";
+      repo = "Chi-Nata";
+      rev = "main";
+      sha256 = "sha256-2LlXJ4LtiyiN0vRtQvqTsCBcMDit/UfNa1x/DfKhJWs=";
+    };
+    installPhase = ''
+      mkdir -p $out/share/icons
+      if [ -d "Chi-Nata" ]; then
+        cp -r Chi-Nata $out/share/icons/
+      else
+        mkdir -p $out/share/icons/Chi-Nata
+        cp -r * $out/share/icons/Chi-Nata/
+      fi
+    '';
+  };
+
+  platinum9Openbox = pkgs.stdenvNoCC.mkDerivation {
+    pname = "platinum9-openbox";
+    version = "master";
+    src = pkgs.fetchFromGitHub {
+      owner = "grassmunk";
+      repo = "Platinum9";
+      rev = "master";
+      hash = "sha256-rKM2/Hk1Z/HszSAO0Yf/Zh3d+QGTRJrAE/Mo90Qxgvw=";
+    };
+    dontCheckForBrokenSymlinks = true;
+    installPhase = ''
+      mkdir -p $out/share/themes/Platinum9
+      # Only copy the openbox theme, ignoring the broken icon folder
+      cp -a openbox-3 $out/share/themes/Platinum9/
+    '';
+  };
 in
 {
   config = lib.mkMerge [
@@ -245,6 +303,236 @@ in
       xdg.portal = {
         enable = true;
         extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+        config.common.default = "*";
+      };
+    })
+    (lib.mkIf sysCfg.labwc.enable {
+      xdg.enable = true;
+
+      home.pointerCursor = {
+        package = pkgs.adwaita-icon-theme;
+        name = "Adwaita";
+        size = 32;
+        gtk.enable = true;
+        x11.enable = true;
+      };
+
+      home.packages = with pkgs; [
+        macos9Theme # The B00merang GTK/Openbox theme
+        platinum9Openbox
+        chicago95 # Pulling this back in specifically for the Chicago/Geneva fonts
+        chiNataIcons
+        adwaita-icon-theme
+        hicolor-icon-theme
+        waybar # Replaces xfce4-panel
+        pcmanfm-qt # Replaces thunar & xfce4-desktop
+        rofi # Replaces xfce4-appfinder
+        grim # Replaces xfce4-screenshooter
+        slurp # Region selection for grim
+        wbg # Minimal Wayland wallpaper setter
+        wlr-randr # To check/set output scaling
+        wayland-utils # for wayland-info
+        libsecret # for keyring integration
+        polkit_gnome # for authentication prompts
+        lxappearance # for debugging themes/icons
+      ];
+
+      home.file.".themes/Mac-OS-9".source = "${macos9Theme}/share/themes/Mac-OS-9";
+      home.file.".icons/Chi-Nata".source = "${chiNataIcons}/share/icons/Chi-Nata";
+
+      gtk = {
+        enable = true;
+        iconTheme = {
+          name = "Chi-Nata";
+          package = chiNataIcons;
+        };
+        theme = {
+          name = "Mac-OS-9";
+          package = macos9Theme;
+        };
+        gtk3.extraConfig = {
+          gtk-application-prefer-dark-theme = 0; # Classic Mac OS is light mode!
+        };
+        gtk4.theme = null;
+      };
+
+      qt = {
+        enable = true;
+        platformTheme.name = "gtk";
+      };
+
+      programs.waybar = {
+        enable = true;
+        settings = {
+          mainBar = {
+            layer = "top";
+            position = "top";
+            height = 26;
+            modules-left = [
+              "custom/apple"
+              "wlr/taskbar"
+            ];
+            modules-center = [ "clock" ];
+            modules-right = [
+              "pulseaudio"
+              "network"
+              "battery"
+              "tray"
+            ];
+
+            "custom/apple" = {
+              format = "";
+              on-click = "rofi -show drun";
+              tooltip = false;
+            };
+
+            "wlr/taskbar" = {
+              format = "{icon}";
+              icon-size = 18;
+              on-click = "activate";
+            };
+
+            "clock" = {
+              format = "{:%a %I:%M %p}";
+              tooltip-format = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
+            };
+
+            "pulseaudio" = {
+              format = "{volume}% {icon}";
+              format-bluetooth = "{volume}% {icon}";
+              format-muted = "";
+              format-icons = {
+                "default" = [
+                  ""
+                  ""
+                ];
+              };
+            };
+          };
+        };
+        style = ''
+          * {
+            font-family: "Geneva", "Chicago", "Fixedsys", sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+          }
+          window#waybar {
+            background-color: #cccccc;
+            border-bottom: 1px solid #000000;
+            color: #000000;
+          }
+          #custom-apple {
+            padding: 0 10px;
+            font-size: 18px;
+          }
+          #clock {
+            padding: 0 10px;
+          }
+          #taskbar button {
+            padding: 0 5px;
+            border: none;
+            background: transparent;
+          }
+          #taskbar button.active {
+            background-color: #999999;
+          }
+          #pulseaudio, #network, #battery, #tray {
+            padding: 0 10px;
+          }
+        '';
+      };
+
+      # Redshift doesn't work on Wayland, use Gammastep
+      services.gammastep = {
+        enable = true;
+        tray = false;
+        provider = "manual";
+        latitude = 51.4625;
+        longitude = 0.0370;
+        temperature = {
+          day = 6500;
+          night = 3500;
+        };
+      };
+
+      # Declarative Labwc Configuration
+      xdg.configFile."labwc/rc.xml".text = ''
+        <?xml version="1.0" ?>
+        <labwc_config>
+          <core>
+            <decoration>server</decoration>
+          </core>
+          <theme>
+            <name>Platinum9</name> <cornerRadius>0</cornerRadius>
+            <font name="Sans" size="10" />
+          </theme>
+          <outputs>
+            <output name="eDP-1">
+              <scale>2</scale>
+            </output>
+          </outputs>
+          <keyboard>
+            <default />
+            <!-- Bindings mimicking your XFCE setup -->
+            <keybind key="A-Return"><action name="Execute" command="ghostty" /></keybind>
+            <keybind key="A-e"><action name="Execute" command="pcmanfm-qt" /></keybind>
+            <keybind key="A-c"><action name="Execute" command="google-chrome-stable" /></keybind>
+            <keybind key="A-d"><action name="Execute" command="rofi -show drun" /></keybind>
+            <keybind key="A-q"><action name="Close" /></keybind>
+          </keyboard>
+          <mouse>
+            <default />
+            <libinput>
+              <device>
+                <naturalScroll>yes</naturalScroll>
+              </device>
+            </libinput>
+          </mouse>
+        </labwc_config>
+      '';
+
+      # Environment variables for Wayland and HiDPI
+      xdg.configFile."labwc/environment".text = ''
+        GDK_BACKEND=wayland
+        QT_QPA_PLATFORM=wayland
+        CLUTTER_BACKEND=wayland
+        SDL_VIDEODRIVER=wayland
+        XDG_SESSION_TYPE=wayland
+        XDG_CURRENT_DESKTOP=labwc
+        MOZ_ENABLE_WAYLAND=1
+
+        # Removed GDK_SCALE=2
+        XCURSOR_SIZE=32
+      '';
+
+      # Autostart essential Wayland daemons
+      xdg.configFile."labwc/autostart" = {
+        executable = true;
+        text = ''
+          # Removed wlr-randr scaling script
+
+          # Update DBus environment
+          dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+
+          # Initialize Keyring
+          eval $(gnome-keyring-daemon --start --components=secrets)
+          export SSH_AUTH_SOCK
+
+          # Start Polkit agent
+          ${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1 &
+
+          waybar &
+          pcmanfm-qt --desktop &
+          wbg ${pkgs.nixos-artwork.wallpapers.binary-white.src} &
+        '';
+      };
+
+      xdg.portal = {
+        enable = true;
+        extraPortals = [
+          pkgs.xdg-desktop-portal-wlr
+          pkgs.xdg-desktop-portal-gtk
+        ];
         config.common.default = "*";
       };
     })
