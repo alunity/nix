@@ -152,7 +152,13 @@ in
       "/dev/ptmx", "/dev/kvm", "/dev/kqemu",
       "/dev/rtc", "/dev/hpet",
       "/dev/input/by-path/pci-0000:00:15.0-platform-i2c_designware.0-event-mouse",
-      "/dev/input/kmonad-kbd"
+      "/dev/input/by-path/pci-0000:00:15.1-platform-i2c_designware.1-event-mouse",
+      "/dev/input/kmonad-kbd",
+      "/dev/input/event0",
+      "/dev/input/event3",
+      "/dev/input/event6",
     ]
   '';
+
+  users.groups.input.members = [ "qemu-libvirtd" ];
 }
