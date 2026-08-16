@@ -53,15 +53,18 @@
 
       # Intel Core Ultra 5 (Meteor Lake) Optimizations
       # These mimic what PPD would normally do, but through TLP
-      CPU_SCALING_GOVERNOR_ON_AC = "performance";
+      CPU_SCALING_GOVERNOR_ON_AC = "powersave";
       CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
 
-      CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
+      CPU_ENERGY_PERF_POLICY_ON_AC = "balance_performance";
       CPU_ENERGY_PERF_POLICY_ON_BAT = "powersave";
 
       # Helps with Intel's modern "Meteor Lake" efficiency
       CPU_BOOST_ON_AC = 1;
       CPU_BOOST_ON_BAT = 1;
+
+      PLATFORM_PROFILE_ON_AC = "balanced";
+      PLATFORM_PROFILE_ON_BAT = "low-power";
     };
   };
 
@@ -190,6 +193,72 @@
     proggyfonts
     wqy_zenhei
   ];
+
+  security.rtkit.enable = true;
+
+  # Prevent USB auto-suspend and clock drift on the KTMicro DAC
+  boot.extraModprobeConfig = ''
+    options snd-usb-audio implicit_fb=1
+  '';
+
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+
+    # 2. Lock graph clock to 48kHz
+    extraConfig.pipewire = {
+      "10-clock-rates" = {
+        "context.properties" = {
+          "default.clock.rate" = 48000;
+          "default.clock.allowed-rates" = [ 48000 ];
+          "default.clock.quantum" = 1024;
+          "default.clock.min-quantum" = 512;
+          "default.clock.max-quantum" = 2048;
+        };
+      };
+    };
+
+    # 3. Hardware rules: 16-bit format + force hardware node to output [ FL FR ]
+    wireplumber.extraConfig = {
+      "50-chu2-dsp-hardware" = {
+        "monitor.alsa.rules" = [
+          {
+            matches = [
+              {
+                "alsa.card_name" = "Chu2 DSP";
+              }
+              {
+                "device.bus" = "usb";
+              }
+            ];
+            actions = {
+              update-props = {
+                # 16-bit stability for KTMicro DSP chip
+                "audio.format" = "S16LE";
+                "audio.rate" = 48000;
+                "audio.allowed-rates" = [ 48000 ];
+
+                # Hardware buffer sizing & scheduling
+                "api.alsa.period-size" = 1024;
+                "api.alsa.headroom" = 1024;
+                "api.alsa.disable-tsched" = true;
+                "api.alsa.disable-mmap" = false;
+                "resample.quality" = 4;
+
+                # FORCE single mono capture port to duplicate to stereo (FL + FR)
+                "audio.position" = [
+                  "FL"
+                  "FR"
+                ];
+              };
+            };
+          }
+        ];
+      };
+    };
+  };
 
   # It tells your system which fonts to prefer for specific types of text.
   fonts.fontconfig = {
