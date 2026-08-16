@@ -13,11 +13,9 @@
 
   home.username = lib.mkDefault osConfig.my.core.username;
   home.homeDirectory = lib.mkDefault "/home/${osConfig.my.core.username}";
-  home.stateVersion = "24.11"; # Match your system stateVersion
+  home.stateVersion = "26.05"; # Match your system stateVersion
 
   programs.home-manager.enable = true;
-
-  sops.secrets.moodle-token = { };
 
   # Install user-specific apps
   home.packages = with pkgs; [
@@ -47,7 +45,6 @@
   home.sessionVariables = {
     EDITOR = "nvim";
     SOPS_AGE_KEY_FILE = "/persist/var/lib/sops-nix/key.txt";
-    MOODLE_TOKEN = "$(cat ${config.sops.secrets.moodle-token.path})";
   };
 
   programs.gnome-shell = {

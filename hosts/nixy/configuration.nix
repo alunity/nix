@@ -150,7 +150,12 @@
       "/var/lib/accounts-service"
       "/var/lib/flatpak"
       "/var/lib/libvirt"
-      "/home/${config.my.core.username}"
+      {
+        directory = "/home/${config.my.core.username}";
+        user = config.my.core.username;
+        group = "users"; # or config.users.users.${config.my.core.username}.group
+        mode = "0700";
+      }
     ];
     files = [
       "/etc/machine-id"
@@ -245,5 +250,5 @@
   services.udev.packages = [ pkgs.sane-airscan ];
   services.flatpak.enable = true;
 
-  system.stateVersion = "24.11"; # Ensure this matches your nixpkgs!
+  system.stateVersion = "26.05"; # Ensure this matches your nixpkgs!
 }
