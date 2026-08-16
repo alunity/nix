@@ -136,7 +136,7 @@
     shellAbbrs = {
       # System Management
       ".." = "cd ..";
-      nrs = "sudo nixos-rebuild switch --flake .#nixy";
+      nrs = "sudo nixos-rebuild switch --flake .#clyde";
       # hms = "nix run home-manager -- switch --flake .#alunity";
 
       # Cleanup & Maintenance

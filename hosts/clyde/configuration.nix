@@ -36,7 +36,7 @@
   nixpkgs.config.allowUnfree = true;
 
   networking.networkmanager.enable = true;
-  networking.hostName = "nixy";
+  networking.hostName = "clyde";
 
   services.thermald.enable = true;
 
@@ -150,6 +150,7 @@
       "/var/lib/accounts-service"
       "/var/lib/flatpak"
       "/var/lib/libvirt"
+      "/var/lib/syncthing"
       {
         directory = "/home/${config.my.core.username}";
         user = config.my.core.username;
@@ -249,6 +250,17 @@
 
   services.udev.packages = [ pkgs.sane-airscan ];
   services.flatpak.enable = true;
+
+  services.syncthing = {
+    enable = true;
+    user = config.my.core.username;
+    group = "users";
+    dataDir = "/home/${config.my.core.username}"; # Base directory for synced paths
+    configDir = "/home/${config.my.core.username}/.config/syncthing";
+
+    # 2. Open firewall ports (22000 TCP/UDP for sync traffic, 21027 UDP for local discovery)
+    openDefaultPorts = true;
+  };
 
   system.stateVersion = "26.05"; # Ensure this matches your nixpkgs!
 }

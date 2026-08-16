@@ -38,7 +38,7 @@
     in
     {
       # 1. System Configuration (nixos-rebuild switch)
-      nixosConfigurations.nixy = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.clyde = nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = { inherit inputs; };
         modules = [
@@ -73,9 +73,9 @@
             }
           )
 
-          ./hosts/nixy/configuration.nix
-          ./hosts/nixy/disko-config.nix
-          ./hosts/nixy/hardware-configuration.nix
+          ./hosts/clyde/configuration.nix
+          ./hosts/clyde/disko-config.nix
+          ./hosts/clyde/hardware-configuration.nix
         ];
       };
     };
