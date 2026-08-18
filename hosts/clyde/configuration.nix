@@ -154,6 +154,7 @@
       "/var/lib/flatpak"
       "/var/lib/libvirt"
       "/var/lib/syncthing"
+      "/var/lib/containers"
       {
         directory = "/home/${config.my.core.username}";
         user = config.my.core.username;
@@ -176,6 +177,8 @@
 
     gnome-tweaks
     adw-gtk3
+
+    distrobox
   ];
   services.tailscale.enable = false;
 
@@ -329,6 +332,12 @@
 
     # 2. Open firewall ports (22000 TCP/UDP for sync traffic, 21027 UDP for local discovery)
     openDefaultPorts = true;
+  };
+
+  virtualisation.podman = {
+    enable = true;
+    dockerCompat = true;
+    defaultNetwork.settings.dns_enabled = true;
   };
 
   system.stateVersion = "26.05"; # Ensure this matches your nixpkgs!
