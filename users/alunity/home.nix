@@ -40,6 +40,7 @@
     qbittorrent-enhanced
     newsflash
     thunderbird
+    anytype
   ];
 
   home.sessionVariables = {
